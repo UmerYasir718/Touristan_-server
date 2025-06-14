@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
-const PackageSchema = new mongoose.Schema({
+const PackageSuggestionSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   title: {
     type: String,
     required: [true, 'Please add a title'],
@@ -31,43 +36,43 @@ const PackageSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Please add a price']
   },
-  rating: {
-    type: Number,
-    min: [1, 'Rating must be at least 1'],
-    max: [5, 'Rating cannot be more than 5'],
-    default: 4.5
-  },
   // New fields for enhanced package details
   hostelType: {
     type: String,
     enum: ['Budget', 'Standard', 'Premium', 'Luxury', 'Other'],
-    default: 'Standard'
+    required: [true, 'Please specify hostel type']
   },
   hostelTypeDetails: {
     type: String,
-    default: ''
+    required: function() {
+      return this.hostelType === 'Other';
+    }
   },
   transportType: {
     type: String,
     enum: ['Economy Bus', 'Luxury Bus', 'Van', 'Car', 'Train', 'Other'],
-    default: 'Economy Bus'
+    required: [true, 'Please specify transport type']
   },
   transportTypeDetails: {
     type: String,
-    default: ''
+    required: function() {
+      return this.transportType === 'Other';
+    }
   },
   mealPlan: {
     type: String,
     enum: ['Breakfast Only', 'Half Board', 'Full Board', 'All Inclusive', 'No Meals', 'Other'],
-    default: 'Breakfast Only'
+    required: [true, 'Please specify meal plan']
   },
   mealPlanDetails: {
     type: String,
-    default: ''
+    required: function() {
+      return this.mealPlan === 'Other';
+    }
   },
   activities: {
     type: [String],
-    default: []
+    required: [true, 'Please add at least one activity']
   },
   coordinates: [{
     place: {
@@ -101,13 +106,14 @@ const PackageSchema = new mongoose.Schema({
       required: true
     }
   }],
-  active: {
-    type: Boolean,
-    default: true
+  status: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected'],
+    default: 'pending'
   },
-  featured: {
-    type: Boolean,
-    default: false
+  adminFeedback: {
+    type: String,
+    default: ''
   },
   createdAt: {
     type: Date,
@@ -115,4 +121,4 @@ const PackageSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('Package', PackageSchema);
+module.exports = mongoose.model('PackageSuggestion', PackageSuggestionSchema);

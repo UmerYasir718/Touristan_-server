@@ -31,6 +31,8 @@ const paymentRoutes = require("./routes/payments");
 const dashboardRoutes = require("./routes/dashboard");
 const siteSettingRoutes = require("./routes/siteSetting");
 const chatRoutes = require("./routes/chat");
+const postRoutes = require("./routes/posts");
+const packageSuggestionRoutes = require("./routes/packageSuggestions");
 
 const app = express();
 
@@ -72,6 +74,8 @@ app.use("/api/payments", paymentRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/settings", siteSettingRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/posts", postRoutes);
+app.use("/api/package-suggestions", packageSuggestionRoutes);
 
 // Error handler middleware
 app.use(errorHandler);
